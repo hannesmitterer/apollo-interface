@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo Interface | Perfezionamento Critico</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow-x: hidden; background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* Contenitore 3D Spettacolare (Sezione Superiore) */
+        #scene-container { height: 75vh; position: relative; overflow: hidden; }
+        
+        /* Contenitore Logica e Pulsanti */
+        #ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; padding-top: 5vh; }
+        
+        /* Indicatore RSI - Ora BLU FISSO (FOCUS TECNICO CRITICO) */
+        #rsi-indicator { 
+            padding: 8px 20px; border-radius: 5px; font-weight: bold; font-size: 1.1em; margin-bottom: 30px; 
+            background-color: #0072ff; /* BLU FISSO */
+            color: #fff; 
+            box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
+            border: 1px solid #58a6ff;
+        }
+
+        /* Pulsante di Accesso/Placeholder */
+        #access-button {
+            padding: 15px 40px; border: none; border-radius: 50px;
+            font-size: 1.2em; font-weight: bold; cursor: not-allowed;
+            background: #2a3340; 
+            color: #9aa8b8; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+        
+        /* Contenuto Attuale (Sezione Inferiore) */
+        #content-section { padding: 40px 10%; background-color: #0d1117; z-index: 5; text-align: center; }
+        h1 { color: #58a6ff; border-bottom: 2px solid #58a6ff; padding-bottom: 10px; }
+        .description { font-size: 1.1em; line-height: 1.6; margin-top: 20px; }
+        
+        /* Placeholder per l'ologramma Euystacio */
+        #hologram-placeholder { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #00f0ff 0%, #0072ff 50%, transparent 80%); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <div id="scene-container">
+        <div id="hologram-placeholder"></div> <div id="ui-overlay">
+            <div id="rsi-indicator">FOCUS TECNICO CRITICO: PERFEZIONAMENTO MOBILE VR/AR</div>
+            
+            <h1 style="color: white; margin-bottom: 5px;">Apollo Digitalis Virtualis</h1>
+            <p style="color: #9aa8b8; margin-bottom: 40px;">Sistema di Comando Interattivo (CIC)</p>
+            
+            <button id="access-button" disabled>
+                Integrazione Mobile VR/AR in Corso...
+            </button>
+        </div>
+    </div>
+
+    <div id="content-section">
+        <h1>Stato Esecutivo: Perfezionamento Totale</h1>
+        <p class="description">La fase GGC/PII è stata completata per atto di Autorità. Le risorse sono ora allocate per finalizzare l'esperienza di comando su tutti i dispositivi mobili (iOS/Android).</p>
+        
+        <p><strong>Obiettivo Corrente:</strong> Consegna di un'interfaccia AR/VR stabile, a basso consumo, in grado di renderizzare l'ologramma Euystacio e le metriche TRE/PV in tempo reale su mobile.</p>
+        
+        <p style="margin-top: 30px;">**Issue in Lavorazione:** <code>hannesmitterer/OI#10</code> (Perfezionamento Totale VR/AR).</p>
+    </div>
+
+    <script>
+        // Simulazione Three.js per l'effetto 3D/Olografico (Codice Essenziale)
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+        const container = document.getElementById('scene-container');
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setClearColor(0x0d1117, 0); // Sfondo trasparente per il CSS
+        container.appendChild(renderer.domElement);
+
+        // Luce ambiente
+        const ambientLight = new THREE.AmbientLight(0x404040, 5); 
+        scene.add(ambientLight);
+
+        // Simulazione di una particella centrale (il Nucleo di Nexus)
+        const geometry = new THREE.SphereGeometry(1, 32, 32);
+        // Shader Volumetrico Semplificato (effetto cangiante blu/ciano)
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x00c6ff, 
+            wireframe: true,
+            transparent: true,
+            opacity: 0.8
+        });
+        const nexusCore = new THREE.Mesh(geometry, material);
+        scene.add(nexusCore);
+
+        camera.position.z = 5;
+
+        // Logica di Animazione (Loop)
+        const animate = () => {
+            requestAnimationFrame(animate);
+
+            // Rotazione per dinamicità
+            nexusCore.rotation.x += 0.005;
+            nexusCore.rotation.y += 0.008;
+
+            // Zoom leggero con tempo per simulare pulsazione (TRE)
+            const scale = 1 + Math.sin(Date.now() * 0.001) * 0.1;
+            nexusCore.scale.set(scale, scale, scale);
+
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        // Adattamento al ridimensionamento della finestra
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // NOTA: La funzione di click interattivo è intenzionalmente disabilitata 
+        // in questa versione in attesa dell'implementazione VR/AR completa.
+    </script>
+</body>
+</html>
