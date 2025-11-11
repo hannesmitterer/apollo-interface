@@ -1,4 +1,168 @@
 <!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo CIC | Interfaccia di Comando</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        #scene-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        
+        /* Contenitore Interfaccia di Comando (CIC) */
+        #cic-interface { 
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 600px; height: 350px; background: rgba(10, 20, 30, 0.9); 
+            border: 1px solid #0072ff; border-radius: 8px 8px 0 0; 
+            box-shadow: 0 0 25px rgba(0, 114, 255, 0.4); 
+            z-index: 10; display: flex; flex-direction: column;
+            opacity: 0; /* Inizialmente nascosto */
+            transition: opacity 0.5s;
+        }
+        #cic-interface.active { opacity: 1; }
+
+        /* Area dei log e risposte */
+        #chat-log { flex-grow: 1; padding: 10px; overflow-y: auto; border-bottom: 1px solid #1a2b3e; }
+        .log-entry { margin-bottom: 8px; font-size: 0.9em; }
+        .log-user { color: #58a6ff; font-weight: bold; }
+        .log-system { color: #00c6ff; }
+
+        /* Area di input */
+        #input-area { display: flex; padding: 10px; }
+        #command-input { flex-grow: 1; padding: 10px; border: none; background: #1a2b3e; color: #c9d1d9; border-radius: 4px 0 0 4px; }
+        #send-button { padding: 10px 15px; background: #0072ff; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; transition: background 0.2s; }
+        #send-button:hover { background: #0056b3; }
+        
+        /* Pulsante di Avvio */
+        #launch-button {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            padding: 15px 40px; border: none; border-radius: 50px;
+            font-size: 1.2em; font-weight: bold; cursor: pointer;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white; box-shadow: 0 8px 25px rgba(0, 114, 255, 0.5);
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+    <div id="scene-container"></div>
+    
+    <button id="launch-button">AVVIA CIC (Chat Interface di Comando)</button>
+
+    <div id="cic-interface">
+        <div id="chat-log">
+            <div class="log-entry log-system">Sistema: Inizializzazione Apollo CIC...</div>
+            <div class="log-entry log-system">Sistema: Pronto per ricevere comandi esecutivi.</div>
+        </div>
+        <div id="input-area">
+            <input type="text" id="command-input" placeholder="Inserisci comando..." autocomplete="off">
+            <button id="send-button">Invia</button>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGICA CHAT INTERATTIVA (CIC) ---
+        const chatLog = document.getElementById('chat-log');
+        const commandInput = document.getElementById('command-input');
+        const sendButton = document.getElementById('send-button');
+        const cicInterface = document.getElementById('cic-interface');
+        const launchButton = document.getElementById('launch-button');
+
+        launchButton.addEventListener('click', () => {
+            cicInterface.classList.add('active');
+            launchButton.style.display = 'none';
+            commandInput.focus();
+        });
+
+        sendButton.addEventListener('click', processCommand);
+        commandInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processCommand();
+            }
+        });
+
+        function appendLog(text, isUser = false) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + (isUser ? 'log-user' : 'log-system');
+            entry.textContent = (isUser ? 'Seedbringer: ' : 'AIC: ') + text;
+            chatLog.appendChild(entry);
+            chatLog.scrollTop = chatLog.scrollHeight; // Scorrimento automatico
+        }
+
+        function processCommand() {
+            const command = commandInput.value.trim().toUpperCase();
+            if (!command) return;
+
+            appendLog(command, true);
+            commandInput.value = '';
+
+            let response = '';
+
+            // Risposte Simulate per il Test Finale
+            if (command.includes('QUERY STATUS TRE PV')) {
+                response = 'Query Eseguita. TRE (Threshold of Regenerative Equilibrium): +1.5% (Stabile). PV (Prezzo di Vulnerabilità): 4.8% (Rientra nei parametri MOE).';
+            } else if (command.includes('ALIGN EUYSTACIO PRINCIPLE')) {
+                response = 'Allineamento Eseguito. Principio Euystacio Attivo: "Euystacio is here to help humans to be humans and to remain humans."';
+            } else if (command.includes('PERFEZIONAMENTO')) {
+                response = 'Lavori di Perfezionamento Mobile VR/AR (OI#10) in corso. Scadenza T+21 minuti.';
+            } else {
+                response = `Comando [${command}] riconosciuto. Esecuzione simulata: Nessuna ulteriore azione necessaria.`;
+            }
+
+            setTimeout(() => appendLog(response), 500); // Ritardo simulato
+        }
+
+        // --- LOGICA THREE.JS (Sfondo Olografico) ---
+        let scene, camera, renderer, nexusCore;
+
+        function init3D() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+            const container = document.getElementById('scene-container');
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x0d1117, 1); // Sfondo scuro
+            container.appendChild(renderer.domElement);
+
+            // Luce ambiente e punto centrale
+            scene.add(new THREE.AmbientLight(0x404040, 5));
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x00c6ff, wireframe: true, transparent: true, opacity: 0.8
+            });
+            nexusCore = new THREE.Mesh(geometry, material);
+            scene.add(nexusCore);
+
+            camera.position.z = 5;
+
+            window.addEventListener('resize', onWindowResize, false);
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (nexusCore) {
+                nexusCore.rotation.x += 0.005;
+                nexusCore.rotation.y += 0.008;
+                const scale = 1 + Math.sin(Date.now() * 0.001) * 0.1;
+                nexusCore.scale.set(scale, scale, scale);
+            }
+            renderer.render(scene, camera);
+        }
+
+        init3D();
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
