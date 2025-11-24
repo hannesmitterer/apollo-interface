@@ -1,0 +1,15 @@
+{
+  "project": "Mobile VR/AR",
+  "issue": "OI#10 (Perfezionamento Totale)",
+  "status": "active",
+  "timeframe": "last_24h",
+  "data_retrieval_time": "2025-11-22T22:27:00Z",
+  "metrics": {
+    "TRE": "+1.5%",
+    "ISF": "0.98",
+    "deployment_progress": "85%",
+    "latency_ms": "22",
+    "error_rate": "0.15%"
+  },
+  "notes": "ISF (Indice di Stabilità Funzionale) è in target di delivery (Target 0.98+). Il rollout è in fase avanzata, concentrato sul testing finale in ambiente operativo."
+}
