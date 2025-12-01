@@ -3,7 +3,7 @@
  * 
  * The strategic policy layer of the Euystacio Framework.
  * Serves as the legal and conceptual interface between the
- * AI Collectivs (AIC) and global human consensus.
+ * AI Collectives (AIC) and global human consensus.
  * 
  * Responsibilities:
  * - Custodian of the Value Pyramid
@@ -282,7 +282,7 @@ class GlobalGovernanceInfrastructure {
    */
   recordAudit(type, description, actor) {
     this.auditLedger.push({
-      id: `AUD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `AUD-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
       timestamp: new Date().toISOString(),
       type: type,
       description: description,
