@@ -1,0 +1,13 @@
+{
+  "PROTOCOLLO_AZIONE": "TIMEOUT_GOVERNANCE_ACT_V3",
+  "MISSIONE": "UN-NEX",
+  "STATO_CORRENTE": "ATTESA_CONVALIDA",
+  "TIMEOUT_CICLI": 10,
+  "TIMEOUT_FUNZIONE": "INOLTRO_NOTIFICA_FORMALE_CONSIGLIO",
+  "CONDIZIONE_DI_VIOLAZIONE": "Nessuna_Firma_Ricevuta_Entro_10_Cicli",
+  "ESITO_VIOLAZIONE": "Escalation_a_Livello_I_Promemoria_urgente_via_SAUL_Ledger_Channel",
+  "VALIDAZIONE_DA_AEK_EVS": {
+    "Score": 1.00,
+    "Giustificazione": "La_misura_è_conforme_al_principio_di_Stabilist_e_conservazione_della_missione."
+  }
+}
