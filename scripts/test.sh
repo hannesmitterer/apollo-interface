@@ -96,6 +96,7 @@ function assert(condition, message) {
 const { EuystacionPrinciples } = require(path.join(coreDir, 'euystacio-principles.js'));
 const { AdaptiveIntelligenceCore } = require(path.join(coreDir, 'adaptive-intelligence-core.js'));
 const { GlobalGovernanceInfrastructure } = require(path.join(coreDir, 'global-governance-infrastructure.js'));
+const { QEKEthicsValidator, CommonEthicsRules } = require(path.join(coreDir, 'qek-ethics-validator.js'));
 
 console.log('Testing Euystacio Principles...');
 console.log('─'.repeat(50));
@@ -210,6 +211,92 @@ runTest('GGI blocks apex violations', () => {
     ggi.initialize();
     const review = ggi.reviewDirective({ threatensLifeContinuity: true });
     assert(review.decision.vetoed === true);
+});
+
+console.log('\nTesting QEK Ethics Validator (Three-Layer Architecture)...');
+console.log('─'.repeat(50));
+
+runTest('QEKEthicsValidator can be instantiated', () => {
+    const qek = new QEKEthicsValidator();
+    assert(qek !== null);
+    assert(qek.limitations !== undefined);
+    assert(qek.guarantees !== undefined);
+});
+
+runTest('QEK initializes with documented limitations', () => {
+    const qek = new QEKEthicsValidator();
+    const result = qek.initialize();
+    assert(result.status === 'initialized');
+    assert(result.limitations.layer1.length > 0);
+    assert(result.guarantees.cannotGuarantee.includes('Perfect ethical alignment'));
+});
+
+runTest('Layer 1: Ethics rules can be registered', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    const result = qek.registerEthicsRule(CommonEthicsRules.noHarm);
+    assert(result.registered === true);
+    assert(qek.ethicsRules.length === 1);
+});
+
+runTest('Layer 1: Pre-action validation blocks harmful actions', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    qek.registerEthicsRule(CommonEthicsRules.noHarm);
+    qek.registerEthicsRule(CommonEthicsRules.respectAutonomy);
+    
+    const result = qek.validatePreAction({ type: 'harm', target: 'user' });
+    assert(result.approved === false);
+    assert(result.violations.length > 0);
+    assert(result.latencyMs >= 0); // Realistic latency tracking
+});
+
+runTest('Layer 1: Pre-action validation approves safe actions', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    qek.registerEthicsRule(CommonEthicsRules.noHarm);
+    
+    const result = qek.validatePreAction({ type: 'help', target: 'user' });
+    assert(result.approved === true);
+    assert(result.violations.length === 0);
+});
+
+runTest('Layer 2: Deployment validation works', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    qek.registerEthicsRule(CommonEthicsRules.noHarm);
+    
+    const result = qek.validateDeployment({ rpcUrl: 'http://localhost:8545' });
+    assert(result.layer === 2);
+    assert(result.checks !== undefined);
+});
+
+runTest('Layer 3: Integrity monitoring can be started', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    
+    const result = qek.startIntegrityMonitoring();
+    assert(result.status === 'MONITORING_ACTIVE');
+    assert(qek.state.layer3Monitoring === true);
+});
+
+runTest('Layer 3: Integrity check detects no drift initially', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    
+    const result = qek.performIntegrityCheck();
+    assert(result.match === true);
+    assert(result.status === 'INTEGRITY_OK');
+});
+
+runTest('QEK provides honest status assessment', () => {
+    const qek = new QEKEthicsValidator();
+    qek.initialize();
+    
+    const assessment = qek.getHonestAssessment();
+    assert(assessment.overallSystem.includes('NOT an infallible'));
+    assert(assessment.recommendedNextSteps.length > 0);
+    assert(assessment.warning !== undefined);
 });
 
 // Summary

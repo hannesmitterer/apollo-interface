@@ -28,16 +28,93 @@ apollo-interface/
 │       ├── apollo-hologram.js           # Main integration module
 │       ├── euystacio-principles.js      # OLF, NSR, Red Code implementation
 │       ├── adaptive-intelligence-core.js # AIC module
-│       └── global-governance-infrastructure.js # GGI module
+│       ├── global-governance-infrastructure.js # GGI module
+│       └── qek-ethics-validator.js      # QEK three-layer ethics validation
 ├── config/
 │   └── apollo-config.json               # Framework configuration
 ├── scripts/
 │   ├── init.sh                          # Initialization script
-│   └── test.sh                          # Test suite
+│   └── test.sh                          # Test suite (23 tests)
 ├── dashboard/
 │   └── VR_AR_Dashboard_Council_Report.md
 └── index.html                           # Interactive dashboard
 ```
+
+## QEK Ethics Validation Architecture
+
+A realistic three-layer system for monitoring and enforcing ethical constraints.
+
+### Layer 1: Pre-Action Validation
+Checks proposed actions against ethical rules *before* execution.
+
+```javascript
+const { QEKEthicsValidator, CommonEthicsRules } = require('./src/core/qek-ethics-validator.js');
+
+const qek = new QEKEthicsValidator();
+qek.initialize();
+
+// Register ethics rules
+qek.registerEthicsRule(CommonEthicsRules.noHarm);
+qek.registerEthicsRule(CommonEthicsRules.respectAutonomy);
+qek.registerEthicsRule(CommonEthicsRules.transparencyRequired);
+
+// Validate before execution
+const result = qek.validatePreAction({ type: 'action', target: 'user' });
+if (result.approved) {
+  // Execute action
+} else {
+  console.log('Blocked:', result.violations);
+}
+```
+
+**Limitations:**
+- ⚠️ Adds latency (typically 10-100ms)
+- ⚠️ Rules must be pre-defined
+- ⚠️ Cannot catch all ethical issues
+- ⚠️ Requires human judgment for edge cases
+
+### Layer 2: Deployment Validation
+Prevents deployment if configuration is invalid.
+
+```javascript
+const deployResult = qek.validateDeployment({
+  rpcUrl: process.env.RPC_URL,
+  ledgerAddress: process.env.ETHICAL_LEDGER_ADDRESS
+});
+
+if (deployResult.status === 'DEPLOYMENT_BLOCKED') {
+  console.log('Configuration incomplete:', deployResult.checks);
+}
+```
+
+### Layer 3: Continuous Integrity Monitoring
+Periodic comparison of runtime state to immutable reference.
+
+```javascript
+// Start monitoring
+qek.startIntegrityMonitoring();
+
+// Manual integrity check
+const check = qek.performIntegrityCheck();
+if (check.status === 'DRIFT_DETECTED') {
+  // Alert and manual intervention required
+}
+```
+
+### Honest Assessment
+
+**What this system CAN guarantee:**
+- ✅ Configuration hasn't been tampered with
+- ✅ Pre-defined rules are checked
+- ✅ Drift is eventually detected
+- ✅ Alerts are triggered on violations
+
+**What this system CANNOT guarantee:**
+- ❌ Perfect ethical alignment
+- ❌ Zero latency validation
+- ❌ Catching all edge cases
+- ❌ Eliminating human judgment needs
+- ❌ Prevention of all harmful outputs
 
 ## Quick Start
 
@@ -170,6 +247,31 @@ ggi.executeRedCodeVeto(reason, target) → VetoResult
 
 // Get global health metrics
 ggi.getGlobalHealth() → HealthMetrics
+```
+
+### QEKEthicsValidator
+
+```javascript
+// Initialize the validator
+qek.initialize() → InitResult
+
+// Register an ethics rule
+qek.registerEthicsRule(rule) → { registered: boolean, ruleId: string }
+
+// Layer 1: Pre-action validation
+qek.validatePreAction(action) → ValidationResult
+
+// Layer 2: Deployment validation
+qek.validateDeployment(config) → DeploymentResult
+
+// Layer 3: Start integrity monitoring
+qek.startIntegrityMonitoring() → MonitoringResult
+
+// Perform integrity check
+qek.performIntegrityCheck() → IntegrityResult
+
+// Get honest status assessment
+qek.getHonestAssessment() → Assessment
 ```
 
 ## Contributing
