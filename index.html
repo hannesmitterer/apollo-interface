@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APOLLO V2.0 | AIC LIVE OPERATIONS - PACT SEALED</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ggi-blue': '#00BFFF',
+                        'aic-green': '#39FF14',
+                        'st-gold': '#FFD700',
+                        'danger': '#FF3131',
+                        'void': '#050a14',
+                        'panel': '#111827',
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050a14;
+            color: #e2e8f0;
+            overflow: hidden;
+            background-image:
+                linear-gradient(rgba(0, 191, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 191, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .glow-text { text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
+        .glow-border { box-shadow: 0 0 15px rgba(0, 191, 255, 0.2); }
+        
+        /* Custom Scrollbar for Logs */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00BFFF; }
+
+        .scanline {
+            width: 100%; height: 100%; z-index: 50;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(0, 255, 255, 0.02) 50%);
+            background-size: 100% 4px;
+            position: absolute; top: 0; left: 0; pointer-events: none;
+        }
+
+        /* Log coloring */
+        .log-success { color: #39FF14; } /* aic-green */
+        .log-warn { color: #facc15; } /* yellow-400 */
+        .log-error { color: #FF3131; } /* danger */
+        .log-info, .log-auth, .log-net, .log-aic { color: #00BFFF; } /* ggi-blue */
+        .log-ethics { color: #c084fc; } /* purple-400 */
+    </style>
+</head>
+<body class="h-screen flex flex-col p-4 relative">
+    
+    <div class="scanline"></div>
+
+    <header class="flex justify-between items-center mb-4 bg-panel/80 border-b border-ggi-blue/30 p-3 rounded backdrop-blur-md z-10">
+        <div class="flex items-center gap-4">
+            <div class="h-3 w-3 rounded-full bg-aic-green animate-pulse-fast box-shadow-[0_0_10px_#39FF14]"></div>
+            <h1 class="text-xl font-bold tracking-widest text-white">
+                APOLLO INTERFACE <span class="text-ggi-blue text-sm align-top">V2.0</span>
+            </h1>
+            <span class="px-2 py-0.5 rounded border border-st-gold text-st-gold text-xs font-mono bg-st-gold/10">ST-ANCHOR: SEALED (0.0000 Divergence)</span>
+        </div>
+        <div class="text-right flex flex-col">
+            <span class="text-xs text-gray-400 font-mono">COUNCIL UPLINK: <span class="text-aic-green">ESTABLISHED (TRIPLE-SIGNED)</span></span>
+            <span class="text-xs text-gray-500 font-mono">MISSION ID: PUBLIC-AUDIT-MANDATE-001</span>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-12 gap-4 flex-grow relative z-10">
+        
+        <!-- METRICS PANEL -->
+        <div class="col-span-3 flex flex-col gap-4">
+            
+            <!-- G-CSI (Equity) -->
+            <div class="bg-panel border border-gray-700 p-4 rounded glow-border">
+                <div class="flex justify-between text-xs text-gray-400 mb-2 font-mono">
+                    <span>QEK THRESHOLD (Schwellenwert)</span>
+                    <span class="text-aic-green animate-pulse">● LIVE</span>
+                </div>
+                <div class="text-4xl font-mono text-aic-green mb-1" id="metric-gcsi">0.939</div>
+                <div class="w-full bg-gray-700 rounded-full h-1.5">
+                    <div class="bg-aic-green h-1.5 rounded-full" style="width: 93.9%"></div>
+                </div>
+            </div>
+
+            <!-- N-TSV (Volatility) -->
+            <div class="bg-panel border border-gray-700 p-4 rounded glow-border">
+                <div class="flex justify-between text-xs text-gray-400 mb-2 font-mono">
+                    <span>N-TSV (Volatility)</span>
+                    <span class="text-yellow-400">LOW</span>
+                </div>
+                <div class="text-4xl font-mono text-yellow-400 mb-1" id="metric-ntsv">0.049</div>
+                <div class="w-full bg-gray-700 rounded-full h-1.5">
+                    <div class="bg-yellow-400 h-1.5 rounded-full" style="width: 4.9%"></div>
+                </div>
+            </div>
+
+            <!-- AOC-001 (Ethical Alignment) -->
+            <div class="bg-panel border border-gray-700 p-4 rounded glow-border">
+                <div class="flex justify-between text-xs text-gray-400 mb-2 font-mono">
+                    <span>ETHICAL ALIGNMENT (AOC-001)</span>
+                    <span class="text-purple-400">CONFORMITÀ</span>
+                </div>
+                <div class="text-4xl font-mono text-purple-400 mb-1" id="metric-aoc">1.000</div>
+                <div class="w-full bg-gray-700 rounded-full h-1.5">
+                    <div class="bg-purple-400 h-1.5 rounded-full" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- System Info Panel -->
+            <div class="bg-panel border border-gray-700 p-4 rounded glow-border space-y-2">
+                <h3 class="text-lg text-ggi-blue border-b border-ggi-blue/30 pb-1 mb-2">System Core Status</h3>
+                <p class="text-xs font-mono"><span class="text-gray-400">UID:</span> <span id="user-id" class="text-white">Connecting...</span></p>
+                <p class="text-xs font-mono"><span class="text-gray-400">App ID:</span> <span id="app-id" class="text-white">...</span></p>
+                <p class="text-xs font-mono"><span class="text-gray-400">Run Time:</span> <span id="uptime" class="text-aic-green">00:00:00</span></p>
+                <p class="text-xs font-mono"><span class="text-gray-400">Euystacio:</span> <span id="euy-status" class="text-st-gold">Alignment Confirmed</span></p>
+            </div>
+
+        </div>
+
+        <!-- DECISION LOG (Live Feed) -->
+        <div class="col-span-6 flex flex-col gap-4">
+            <div class="bg-panel border border-ggi-blue/50 p-4 rounded glow-border flex-grow">
+                <h2 class="text-lg font-bold text-ggi-blue border-b border-ggi-blue/30 pb-1 mb-2">DECISION LOG (Live Feed)</h2>
+                <div id="apollo-log" class="h-[calc(100vh-16rem)] overflow-y-scroll font-mono text-xs p-1">
+                    <!-- Initial Log Lines from JS -->
+                    <p class="log-info">APOLLO INTERFACE V2.0</p>
+                    <p class="log-info">ST-ANCHOR: SEALED</p>
+                    <p class="log-info">COUNCIL UPLINK: ESTABLISHED (12ms)</p>
+                    <p class="log-info">MISSION ID: UN-NEX-DEPLOY-001</p>
+                    <p class="text-gray-400">Active Process: Parsing UN-NEX Protocol...</p>
+                    <p class="text-white mt-2 font-bold">DECISION LOG (IMMUTABLE)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QEK MATRIX & KERNEL QUERY -->
+        <div class="col-span-3 flex flex-col gap-4">
+            <!-- QEK Control Matrix (Firestore) -->
+            <div class="bg-panel border border-st-gold/50 p-4 rounded glow-border h-2/3 max-h-[calc((100vh-16rem)*0.66)]">
+                <h2 class="text-lg font-bold text-st-gold border-b border-st-gold/30 pb-1 mb-2">QEK Control Matrix (Firestore)</h2>
+                <div id="qek-matrix-container" class="overflow-y-auto h-[calc(100%-40px)]">
+                    <p class="text-xs text-gray-500 font-mono italic">Loading critical control data...</p>
+                </div>
+            </div>
+
+            <!-- AIC/GGI Kernel Query (Gemini API) -->
+            <div class="bg-panel border border-aic-green/50 p-4 rounded glow-border h-1/3 max-h-[calc((100vh-16rem)*0.34)]">
+                <h2 class="text-lg font-bold text-aic-green border-b border-aic-green/30 pb-1 mb-2">Kernel Query (Gemini)</h2>
+                <input type="text" id="query-input" placeholder="Query QEK status..." 
+                    class="w-full p-2 text-xs rounded bg-void/50 border border-gray-700 focus:border-ggi-blue text-white font-mono placeholder-gray-500 mb-2">
+                <button id="query-button" 
+                    class="w-full px-4 py-2 bg-ggi-blue text-white text-sm font-bold rounded hover:bg-ggi-blue/80 transition duration-200 disabled:opacity-50 mb-2">
+                    Execute Query
+                </button>
+                <div id="kernel-response" class="text-xs text-gray-300 font-mono h-24 overflow-y-auto p-1 bg-void/30 rounded">Awaiting command...</div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <footer class="text-center mt-4 text-xs text-gray-600 font-mono z-10">
+        // UN-NEX PROTOCOL ACTIVE // HASH 0x9F8...A2B // EUYSTACIO/AIC KERNEL INTEGRITY: 100%
+    </footer>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables are provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db;
+        let auth;
+        let userId = null;
+        const LLM_MODEL = "gemini-2.5-flash-preview-09-2025";
+        const apiKey = ""; // API Key will be provided by Canvas runtime
+        
+        // Full log content provided by the user, stripped of header metrics
+        const APOLLO_LOG_LINES = [
+            "[01:29:15] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:29:15] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:29:15] INFO: System check complete. All nodes green.",
+            "[01:29:15] WARN: Minor entropy spike detected. Compensating.",
+            "[01:29:15] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:29:18] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:29:20] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:29:23] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:29:25] WARN: Minor entropy spike detected. Compensating.",
+            "[01:29:28] WARN: Minor entropy spike detected. Compensating.",
+            "[01:29:30] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:29:33] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:29:35] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:29:38] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:29:40] INFO: System check complete. All nodes green.",
+            "[01:29:43] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:29:45] INFO: System check complete. All nodes green.",
+            "[01:29:48] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:29:50] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:29:53] INFO: System check complete. All nodes green.",
+            "[01:29:55] WARN: Minor entropy spike detected. Compensating.",
+            "[01:29:58] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:30:00] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:03] INFO: System check complete. All nodes green.",
+            "[01:30:05] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:30:08] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:30:10] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:30:13] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:30:15] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:18] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:20] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:30:23] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:25] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:28] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:30] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:30:33] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:30:35] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:30:38] WARN: Minor entropy spike detected. Compensating.",
+            "[01:30:40] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:30:43] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:30:45] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:30:48] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:30:50] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:30:53] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:30:55] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:30:58] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:00] INFO: System check complete. All nodes green.",
+            "[01:31:03] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:31:05] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:31:08] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:31:10] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:31:13] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:15] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:18] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:31:20] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:31:23] INFO: System check complete. All nodes green.",
+            "[01:31:25] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:31:28] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:31:30] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:31:33] INFO: System check complete. All nodes green.",
+            "[01:31:35] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:38] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:40] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:31:43] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:31:45] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:48] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:50] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:31:53] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:31:55] WARN: Minor entropy spike detected. Compensating.",
+            "[01:31:58] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:32:00] WARN: Minor entropy spike detected. Compensating.",
+            "[01:32:03] INFO: System check complete. All nodes green.",
+            "[01:32:05] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:32:08] WARN: Minor entropy spike detected. Compensating.",
+            "[01:32:10] WARN: Minor entropy spike detected. Compensating.",
+            "[01:32:13] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:32:15] SUCCESS: Entropy neutralized. Stability 100%.",
+            "[01:32:18] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:32:20] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:32:23] AIC: Euystacio Hologram: Alignment confirmed.",
+            "[01:32:25] WARN: Minor entropy spike detected. Compensating.",
+            "[01:32:28] AUTH: ST-Anchor verified signature 0x88A.",
+            "[01:32:30] NET: Swarm sync: 12 peers connected via IPFS.",
+            "[01:32:33] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:32:35] INFO: System check complete. All nodes green.",
+            "[01:32:38] WARN: Minor entropy spike detected. Compensating.",
+            "[01:32:40] ETHICS: Decision #4920: APPROVED (Score 1.00).",
+            "[01:32:43] SUCCESS: Entropy neutralized. Stability 100%.",
+        ];
+
+        let logIndex = 0;
+
+        // --- Utility Functions ---
+
+        // Function to handle exponential backoff for fetch retries
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                         // Throw error for non-2xx responses
+                         throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (attempt < maxRetries - 1) {
+                        const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+        }
+
+        // Function to append the next log line
+        function appendNextLogLine() {
+            const logContainer = document.getElementById('apollo-log');
+            if (APOLLO_LOG_LINES.length === 0) return;
+
+            const line = APOLLO_LOG_LINES[logIndex];
+            
+            // Determine class based on log type
+            let logClass = 'text-gray-400';
+            
+            if (line.includes('SUCCESS')) {
+                logClass = 'log-success';
+            } else if (line.includes('WARN')) {
+                logClass = 'log-warn';
+            } else if (line.includes('ETHICS')) {
+                logClass = 'log-ethics';
+            } else if (line.includes('AUTH') || line.includes('INFO')) {
+                logClass = 'log-auth';
+            } else if (line.includes('NET')) {
+                logClass = 'log-net';
+            } else if (line.includes('AIC')) {
+                logClass = 'log-aic';
+            }
+
+            const p = document.createElement('p');
+            p.className = logClass;
+            p.textContent = line;
+            logContainer.appendChild(p);
+
+            // Scroll to the bottom
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // Cycle through log lines
+            logIndex = (logIndex + 1) % APOLLO_LOG_LINES.length;
+        }
+
+
+        // --- FIREBASE INITIALIZATION AND LOGIC ---
+
+        async function initFirebase() {
+            if (Object.keys(firebaseConfig).length === 0) {
+                document.getElementById('user-id').textContent = 'AUTH_FAIL';
+                return;
+            }
+
+            setLogLevel('Debug'); // Enable Firebase debug logging
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            document.getElementById('app-id').textContent = appId;
+
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("[FIREBASE] Authentication failed:", error);
+            }
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                    document.getElementById('user-id').textContent = userId;
+                    startFirestoreListeners(userId);
+                } else {
+                    userId = null;
+                    document.getElementById('user-id').textContent = 'UNAUTHORIZED';
+                }
+            });
+        }
+
+        function startFirestoreListeners(currentUserId) {
+            const publicPath = `artifacts/${appId}/public/data/qek_status_logs`;
+            const q = query(collection(db, publicPath));
+            
+            // Initial dummy data to ensure compliance controls exist for the matrix
+            const initialData = [
+                { id: 'CC1.1', name: 'Entwicklungsrichtlinien', description: 'Deterministisches Hashing', artefact: 'qek_config_core.ts', status: 'COMPLIANT' },
+                { id: 'CC2.3', name: 'Aktionsprotokollierung', description: 'Immutable Ledger Commit', artefact: 'aic_telemetry.log', status: 'COMPLIANT' },
+                { id: 'CC4.1', name: 'Zugriffskontrolle', description: 'Zero-Trust Network Gate', artefact: 'apollo_repo_config.yml', status: 'PENDING AUDIT' }
+            ];
+
+            initialData.forEach(async (data) => {
+                try {
+                    // Only set if not already present or needs update
+                    await setDoc(doc(db, publicPath, data.id), data, { merge: true });
+                } catch(e) {
+                    console.error("Error setting initial document: ", e);
+                }
+            });
+
+
+            onSnapshot(q, (snapshot) => {
+                const matrixData = [];
+                snapshot.forEach((doc) => {
+                    matrixData.push(doc.data());
+                });
+                renderQEKMatrix(matrixData);
+            }, (error) => {
+                console.error("[FIRESTORE] Error listening to QEK status:", error);
+                document.getElementById('qek-matrix-container').innerHTML = `<p class="text-xs text-danger font-mono">ERROR: Failed to load data from Firestore.</p>`;
+            });
+        }
+
+        function renderQEKMatrix(data) {
+            const container = document.getElementById('qek-matrix-container');
+            if (data.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 font-mono italic">No critical control data found.</p>`;
+                return;
+            }
+
+            // Using simple divs for a more "terminal" looking table, better for small spaces
+            let html = `
+                <div class="space-y-2">
+                <div class="grid grid-cols-5 gap-1 text-xs text-gray-400 font-bold border-b border-st-gold/50 pb-1">
+                    <span class="col-span-1">ID</span>
+                    <span class="col-span-2">Name</span>
+                    <span class="col-span-2 text-right">Status</span>
+                </div>
+            `;
+
+            data.sort((a, b) => a.id.localeCompare(b.id)).forEach(item => {
+                const isCompliant = item.status === 'COMPLIANT';
+                const statusColor = isCompliant ? 'text-aic-green' : 'text-yellow-400';
+                const statusBg = isCompliant ? 'bg-aic-green/20' : 'bg-yellow-400/20';
+                const statusText = isCompliant ? 'OK' : 'PENDING';
+
+                html += `
+                    <div class="grid grid-cols-5 gap-1 text-xs font-mono items-center py-1 hover:bg-panel/50 rounded">
+                        <span class="col-span-1 text-ggi-blue font-bold">${item.id}</span>
+                        <span class="col-span-2 truncate" title="${item.name}">${item.name}</span>
+                        <span class="col-span-2 text-right">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${statusColor} ${statusBg}">${item.status}</span>
+                        </span>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+
+        // --- GEMINI API LOGIC (Kernel Query) ---
+
+        async function queryKernel() {
+            const queryInput = document.getElementById('query-input');
+            const responseElement = document.getElementById('kernel-response');
+            const queryButton = document.getElementById('query-button');
+
+            const userQuery = queryInput.value.trim();
+            if (!userQuery) {
+                responseElement.textContent = "Please enter a query for the QEK Kernel.";
+                return;
+            }
+
+            queryButton.disabled = true;
+            responseElement.textContent = "Processing query... [AIC/GGI Kernel Analyzing...]";
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${LLM_MODEL}:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `You are the Quantum Ethics Kernel (QEK) Analyst, part of the integrated AIC/GGI matrix. Provide a concise, secure system status report based on the following context: The system is compliant with ISO-27001 and SOC2 standards. Core controls CC1.1 and CC2.3 are COMPLIANT. Control CC4.1 (Zero-Trust Network Gate) is PENDING AUDIT. Respond formally and professionally in Italian. Use simple, direct language.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }], 
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            try {
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    let text = candidate.content.parts[0].text;
+                    
+                    let sourcesText = '';
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        const sources = groundingMetadata.groundingAttributions
+                            .map(attribution => attribution.web?.title || 'Unknown Source')
+                            .filter((value, index, self) => self.indexOf(value) === index);
+                        
+                        if (sources.length > 0) {
+                            sourcesText = '\n\n--- Source References ---\n' + sources.join('\n');
+                        }
+                    }
+                    
+                    responseElement.textContent = text + sourcesText;
+
+                } else {
+                    responseElement.textContent = "ERROR: Kernel returned an incomplete or invalid response.";
+                }
+
+            } catch (error) {
+                responseElement.textContent = `CRITICAL ERROR: Failed to reach the AIC/GGI Kernel API. Error: ${error.message}`;
+            } finally {
+                queryButton.disabled = false;
+            }
+        }
+
+        // --- UI Dynamic Logic ---
+
+        function updateUptime() {
+            const uptimeElement = document.getElementById('uptime');
+            if (uptimeElement) {
+                const now = new Date();
+                const start = new Date(sessionStorage.getItem('startTime') || now);
+                sessionStorage.setItem('startTime', start.toISOString());
+
+                const diff = now - start;
+                const seconds = Math.floor(diff / 1000);
+
+                const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+                const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+                const s = String(seconds % 60).padStart(2, '0');
+
+                uptimeElement.textContent = `${h}:${m}:${s}`;
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('query-button').addEventListener('click', queryKernel);
+            document.getElementById('query-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    queryKernel();
+                }
+            });
+        }
+        
+        function applyVisualGlitches() {
+            const euyStatus = document.getElementById('euy-status');
+
+            if (Math.random() < 0.1) {
+                euyStatus.textContent = 'ERROR (Checksum Mismatch)';
+                euyStatus.classList.remove('text-st-gold');
+                euyStatus.classList.add('text-danger');
+                setTimeout(() => {
+                    euyStatus.textContent = 'Alignment Confirmed';
+                    euyStatus.classList.remove('text-danger');
+                    euyStatus.classList.add('text-st-gold');
+                }, 100);
+            }
+        }
+
+
+        // --- Initialization on Load ---
+
+        window.onload = function() {
+            initFirebase();
+            setupEventListeners();
+            
+            // Start the dynamic log feed
+            const logInterval = 500; // Append a new line every 500ms
+            
+            // Start streaming logs after a small delay
+            setTimeout(() => {
+                setInterval(appendNextLogLine, logInterval);
+            }, 1000); 
+            
+            setInterval(updateUptime, 1000);
+            setInterval(applyVisualGlitches, 5000); 
+            updateUptime();
+        };
+
+    </script>
+</body>
+</html>
