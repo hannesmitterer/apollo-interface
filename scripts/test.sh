@@ -299,6 +299,42 @@ runTest('QEK provides honest status assessment', () => {
     assert(assessment.warning !== undefined);
 });
 
+console.log('\nTesting HologramClone Component...');
+console.log('─'.repeat(50));
+
+// Load the HologramClone module
+const { HologramClone } = require(path.join(rootDir, 'src', 'components', 'HologramClone.js'));
+
+runTest('HologramClone can be instantiated', () => {
+    const hologram = new HologramClone();
+    assert(hologram !== null);
+    assert(hologram.active === true);
+});
+
+runTest('HologramClone accepts configuration options', () => {
+    const hologram = new HologramClone({
+        scale: 2,
+        spinSpeed: 0.5,
+        hologramColor: 0xff00ff,
+        opacity: 0.6,
+        emissiveIntensity: 1.0,
+        position: [1, 2, 3]
+    });
+    assert(hologram.scale === 2);
+    assert(hologram.spinSpeed === 0.5);
+    assert(hologram.hologramColor === 0xff00ff);
+    assert(hologram.opacity === 0.6);
+    assert(hologram.emissiveIntensity === 1.0);
+    assert(hologram.position[0] === 1);
+});
+
+runTest('HologramClone can toggle active state', () => {
+    const hologram = new HologramClone();
+    assert(hologram.active === true);
+    hologram.setActive(false);
+    assert(hologram.active === false);
+});
+
 // Summary
 console.log('\n' + '═'.repeat(50));
 console.log(`Tests passed: ${testsPassed}`);
