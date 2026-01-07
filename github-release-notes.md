@@ -79,6 +79,9 @@ The archive is also distributed via IPFS for decentralized, permanent storage.
 
 **IPFS CID:** `[To be added after upload]`
 
+<!-- TODO: Update this section with actual IPFS CID after uploading the archive.
+     Instructions for upload are in ipfs-distribution.md -->
+
 **Gateway Access:**
 - https://ipfs.io/ipfs/[CID]
 - https://gateway.pinata.cloud/ipfs/[CID]

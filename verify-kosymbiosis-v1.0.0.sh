@@ -2,6 +2,13 @@
 #
 # KOSYMBIOSIS Archive Verification Script
 #
+# This script verifies the integrity of the KOSYMBIOSIS archive by:
+# 1. Checking SHA-256 checksum
+# 2. Verifying presence of all signature files
+# 3. Providing instructions for GPG signature verification
+#
+# Usage: ./verify-kosymbiosis-v1.0.0.sh
+#
 
 set -e
 

@@ -81,7 +81,7 @@ fi
 
 # Create archive
 cd "$ROOT_DIR"
-zip -r "$ARCHIVE_FILE" KOSYMBIOSIS/ -x "*.DS_Store" "*/\.*" > /dev/null
+zip -r "$ARCHIVE_FILE" KOSYMBIOSIS/ -x "*.DS_Store" "**/.*" > /dev/null
 
 if [ -f "$ARCHIVE_FILE" ]; then
     ARCHIVE_SIZE=$(du -h "$ARCHIVE_FILE" | cut -f1)
