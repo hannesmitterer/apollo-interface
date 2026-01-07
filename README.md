@@ -8,7 +8,7 @@ A living nexus where humanity, ethics, and technology converge. This framework i
 
 The complete, immutable archive of the KOSYMBIOSIS project is now available:
 - **📦 Archive:** `kosymbiosis-v1.0.0.zip` (28K)
-- **🔐 SHA-256:** `ec50191697a575a08301a15f33935f7299403e5d71280d64a6917737aef10f38`
+- **🔐 SHA-256:** `02e09984d2d6c1cfaa4d113cf7fb160b9d994b40b879b3c35b86eeeb6d7b1708`
 - **✍️ Signatures:** Triple-verified (3 of 3)
 - **📍 Location:** [KOSYMBIOSIS/](./KOSYMBIOSIS/) directory
 
