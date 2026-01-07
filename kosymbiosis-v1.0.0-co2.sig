@@ -1,0 +1,14 @@
+-----BEGIN PGP SIGNATURE-----
+Comment: KOSYMBIOSIS Archive - Technical Reviewer Signature
+Comment: This is a placeholder signature for demonstration purposes
+Comment: In production, replace with actual GPG signature
+
+Archive: kosymbiosis-v1.0.0.zip
+SHA-256: ec50191697a575a08301a15f33935f7299403e5d71280d64a6917737aef10f38
+Date: 2026-01-07T00:43:51Z
+Signer: Technical Reviewer
+Role: Security and Quality Verification
+
+To generate actual signature, use:
+gpg --detach-sign --armor -o kosymbiosis-v1.0.0-co2.sig kosymbiosis-v1.0.0.zip
+-----END PGP SIGNATURE-----
