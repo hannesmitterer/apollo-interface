@@ -362,6 +362,18 @@ qek.getHonestAssessment() → Assessment
 
 ## Deployment
 
+### Live Demo
+
+🌐 **[Visit Live Interface](https://hannesmitterer.github.io/apollo-interface/)**
+
+Experience the interactive holographic visualization and neural dialogue system.
+
+### For Developers
+
+**Quick Start:**
+- See [QUICKSTART.md](./QUICKSTART.md) for rapid local setup
+- See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment guide
+
 ### Local Development
 
 ```bash
