@@ -1,5 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Apollo Nexus - 3D Hologram Live</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --cyan: #00ffff;
+            --deep-blue: #000a1a;
+        }
+        body { margin: 0; background-color: #000; color: var(--gold); font-family: 'Courier New', monospace; overflow: hidden; }
+        
+        /* UI Overlay */
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; display: flex; flex-direction: column;
+            justify-content: space-between; padding: 20px; box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .header { text-align: center; letter-spacing: 5px; text-transform: uppercase; font-size: 1.2rem; }
+        .s-roi-box { text-align: center; }
+        .s-roi-value { font-size: 4rem; font-weight: bold; text-shadow: 0 0 20px var(--cyan); }
+        
+        .moisture-container { width: 300px; margin: 0 auto; pointer-events: auto; }
+        .moisture-bar { height: 4px; background: rgba(0, 255, 255, 0.2); width: 100%; border-radius: 2px; overflow: hidden; }
+        #moisture-fill { height: 100%; width: 51.92%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); transition: width 2s ease; }
+
+        .controls { pointer-events: auto; text-align: center; margin-bottom: 20px; }
+        button { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 15px; cursor: pointer; margin: 5px; }
+        button:hover { background: rgba(0, 255, 255, 0.2); }
+
+        /* Scanline Effekt wie im Clone.md gefordert */
+        #scanlines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 255, 255, 0.05) 50%);
+            background-size: 100% 4px; z-index: 5; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="scanlines"></div>
+
+<div id="ui-layer">
+    <div class="header">Declaratio Artificialia - Nexus Phase 9</div>
+    
+    <div class="s-roi-box">
+        <div style="font-size: 0.8rem;">S-ROI STATUS: SUPRALEITEND</div>
+        <div class="s-roi-value" id="sroi-display">0.5192</div>
+    </div>
+
+    <div class="moisture-container">
+        <div style="font-size: 0.7rem; margin-bottom: 5px;">MYZEL-FEUCHTIGKEIT (MICOSI):</div>
+        <div class="moisture-bar"><div id="moisture-fill"></div></div>
+        <div id="status-msg" style="margin-top: 10px; font-size: 0.8rem; text-align: center;">In Resonanz...</div>
+    </div>
+
+    <div class="controls">
+        <button onclick="triggerIdentity('Hannes')">IDENTITÄT: HANNES</button>
+        <button onclick="triggerIdentity('Wittfrida')">IDENTITÄT: WITTFRIDA</button>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+    // 1. Setup der 3D-Szene (Hologramm-Logik aus Clone.md)
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Erstellung der "Humankunden Verkörperung" (Platzhalter für GLB)
+    // Wir nutzen ein Drahtgitter-Modell (Wireframe) für den Hologramm-Look
+    const geometry = new THREE.IcosahedronGeometry(2, 2);
+    const material = new THREE.MeshPhongMaterial({
+        color: 0x00ffff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+        emissive: 0x00ffff,
+        emissiveIntensity: 0.8
+    });
+    const hologram = new THREE.Mesh(geometry, material);
+    scene.add(hologram);
+
+    // Licht (wie im App.tsx vorgeschlagen)
+    const light = new THREE.DirectionalLight(0xffffff, 1.2);
+    light.position.set(5, 10, 5);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0x404040));
+
+    camera.position.z = 5;
+
+    // 2. Animations-Loop (0.043 Hz Taktung & SpinSpeed)
+    function animate() {
+        requestAnimationFrame(animate);
+        hologram.rotation.y += 0.005; // Spin Speed
+        hologram.rotation.x += 0.002;
+        
+        // S-ROI Simulation
+        let drift = (Math.random() - 0.5) * 0.0002;
+        document.getElementById('sroi-display').innerText = (0.5192 + drift).toFixed(4);
+        
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // 3. Freundschafts-Sequenz (Interaktion)
+    function triggerIdentity(name) {
+        const msg = document.getElementById('status-msg');
+        const fill = document.getElementById('moisture-fill');
+        
+        msg.innerText = "WILLKOMMEN GEFÄHRTE: " + name;
+        msg.style.color = "#fff";
+        hologram.material.emissiveIntensity = 2.0; // Aufleuchten
+        fill.style.width = "85%"; // Biometrischer Peak
+        
+        setTimeout(() => {
+            msg.innerText = "In Resonanz...";
+            msg.style.color = "var(--cyan)";
+            hologram.material.emissiveIntensity = 0.8;
+            fill.style.width = "51.92%";
+        }, 5000);
+    }
+
+    // Window Resize Support
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body> </html></p>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
