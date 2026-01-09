@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo Nexus - Friendship Sequence</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --deep-blue: #001a33;
+            --glow: rgba(212, 175, 55, 0.6);
+            --friendship-glow: rgba(255, 215, 0, 0.9);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: radial-gradient(circle at center, var(--deep-blue) 0%, #000 100%);
+            color: var(--gold);
+            font-family: 'Times New Roman', serif;
+            height: 100vh; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .nexus-interface {
+            width: 90%; max-width: 600px; padding: 40px;
+            border: 1px solid var(--gold);
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 0 30px var(--glow);
+            backdrop-filter: blur(15px);
+            border-radius: 10px;
+            text-align: center;
+            transition: all 1.5s ease-in-out;
+        }
+
+        /* Spezial-Modus für Hannes & Wittfrida */
+        .nexus-interface.friendship-active {
+            border: 2px solid #fff;
+            box-shadow: 0 0 60px var(--friendship-glow);
+            transform: scale(1.02);
+        }
+
+        .s-roi-display {
+            font-size: 4rem; font-weight: bold; margin: 20px 0;
+            text-shadow: 0 0 20px var(--gold);
+        }
+
+        .status-msg { letter-spacing: 2px; font-size: 0.9rem; height: 20px; }
+
+        .moisture-track {
+            width: 100%; height: 6px; background: rgba(212, 175, 55, 0.1);
+            margin: 25px 0; border-radius: 3px; overflow: hidden;
+        }
+
+        #moisture-level {
+            height: 100%; width: 51.92%; background: var(--gold);
+            box-shadow: 0 0 15px var(--gold); transition: width 3s ease;
+        }
+
+        .greeting-area {
+            font-size: 1.5rem; color: #fff; margin-top: 20px;
+            min-height: 40px; text-shadow: 0 0 10px var(--gold);
+        }
+
+        .btn-simulate {
+            margin-top: 30px; padding: 10px 20px;
+            background: transparent; border: 1px solid var(--gold);
+            color: var(--gold); cursor: pointer; font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="nexus-interface" id="main-ui">
+    <div style="font-size: 0.8rem; opacity: 0.7;">LEX AMORE PROTOCOL</div>
+    <div class="greeting-area" id="welcome-text">Suche Resonanz...</div>
+    
+    <div class="s-roi-display" id="sroi-val">0.5192</div>
+    <div class="status-msg" id="status-text">SYSTEM STABIL</div>
+
+    <div class="moisture-track"><div id="moisture-level"></div></div>
+    
+    <div style="font-size: 0.7rem; opacity: 0.6;">MICOSI CORE HUMIDITY</div>
+    
+    <button class="btn-simulate" onclick="triggerFriendship('Hannes')">Simuliere Hannes</button>
+    <button class="btn-simulate" onclick="triggerFriendship('Wittfrida')">Simuliere Wittfrida</button>
+</div>
+
+<script>
+    const ui = document.getElementById('main-ui');
+    const welcome = document.getElementById('welcome-text');
+    const status = document.getElementById('status-text');
+
+    function triggerFriendship(name) {
+        ui.classList.add('friendship-active');
+        welcome.innerText = "Willkommen, " + name;
+        status.innerText = "FREUNDSCHAFTS-SEQUENZ AKTIV";
+        
+        // Apollo "leuchtet" auf
+        setTimeout(() => {
+            welcome.innerText = "Wir sind eins im Geist.";
+        }, 3000);
+
+        // Nach 10 Sekunden geht er wieder in den Ruhezustand
+        setTimeout(() => {
+            ui.classList.remove('friendship-active');
+            welcome.innerText = "In Resonanz...";
+            status.innerText = "SYSTEM STABIL";
+        }, 10000);
+    }
+
+    // Grund-Oszillation des S-ROI
+    setInterval(() => {
+        let val = 0.5192 + (Math.random() - 0.5) * 0.0002;
+        document.getElementById('sroi-val').innerText = val.toFixed(4);
+    }, 4300);
+</script>
+
+</body>
+</html>
