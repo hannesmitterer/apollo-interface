@@ -2,6 +2,12 @@
 
 A living nexus where humanity, ethics, and technology converge. This framework integrates the Euystacio principles with adaptive intelligence and global governance to create an ethical, responsive, and joyful system.
 
+## 🌐 Live Demo
+
+**Visit the live interface:** [https://hannesmitterer.github.io/apollo-interface/](https://hannesmitterer.github.io/apollo-interface/)
+
+Experience the interactive holographic visualization and neural dialogue interface powered by the Euystacio principles.
+
 ## 🎯 KOSYMBIOSIS Project - Final Archive Available
 
 **The KOSYMBIOSIS project has been finalized and sealed!**
@@ -353,6 +359,48 @@ qek.performIntegrityCheck() → IntegrityResult
 // Get honest status assessment
 qek.getHonestAssessment() → Assessment
 ```
+
+## Deployment
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### GitHub Pages Deployment
+
+The project is automatically deployed to GitHub Pages on every push to the `main` branch.
+
+**Deployment Workflow:**
+1. Push changes to `main` branch
+2. GitHub Actions workflow (`.github/workflows/deploy.yml`) triggers automatically
+3. Project is built using Vite
+4. Built files are deployed to GitHub Pages
+5. Site is available at: https://hannesmitterer.github.io/apollo-interface/
+
+**Manual Deployment:**
+
+You can also trigger a manual deployment from the GitHub Actions tab:
+1. Go to the "Actions" tab in the repository
+2. Select "Deploy to GitHub Pages" workflow
+3. Click "Run workflow"
+
+**Build Configuration:**
+- Base URL is configured for GitHub Pages (`/apollo-interface/`)
+- Assets are optimized and bundled
+- React Three Fiber components are compiled
+- All dependencies are properly resolved
 
 ## Contributing
 
